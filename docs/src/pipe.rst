@@ -60,7 +60,7 @@ API
         92 and 108 bytes.
 
     .. note::
-        To bind a Linux abstract namespace socket, use @ instead of \0 as the first character
+        To bind a Linux abstract namespace socket, use @ instead of \0 as the first character.
 
 .. c:function:: void uv_pipe_connect(uv_connect_t* req, uv_pipe_t* handle, const char* name, uv_connect_cb cb)
 
@@ -71,7 +71,7 @@ API
         92 and 108 bytes.
 
     .. note::
-        To connect a Linux abstract namespace socket, use @ instead of \0 as the first character
+        To connect a Linux abstract namespace socket, use @ instead of \0 as the first character.
 
 .. c:function:: int uv_pipe_getsockname(const uv_pipe_t* handle, char* buffer, size_t* size)
 
