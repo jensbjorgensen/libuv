@@ -69,6 +69,13 @@ int uv_pipe_bind(uv_pipe_t* handle, const char* name) {
   uv__strscpy(saddr.sun_path, pipe_fname, sizeof(saddr.sun_path));
   saddr.sun_family = AF_UNIX;
 
+#if defined(__linux__)
+  /* Linux abstract namespace */
+  if (saddr.sun_path[0] == '@') {
+      saddr.sun_path[0] = '\x00';
+  }
+#endif
+
   if (bind(sockfd, (struct sockaddr*)&saddr, sizeof saddr)) {
     err = UV__ERR(errno);
     /* Convert ENOENT to EACCES for compatibility with Windows. */
@@ -192,6 +199,13 @@ void uv_pipe_connect(uv_connect_t* req,
   uv__strscpy(saddr.sun_path, name, sizeof(saddr.sun_path));
   saddr.sun_family = AF_UNIX;
 
+#if defined(__linux__)
+  /* Linux abstract namespace */
+  if (saddr.sun_path[0] == '@') {
+    saddr.sun_path[0] = '\x00';
+  }
+#endif
+
   do {
     r = connect(uv__stream_fd(handle),
                 (struct sockaddr*)&saddr, sizeof saddr);
@@ -257,9 +271,13 @@ static int uv__pipe_getsockpeername(const uv_pipe_t* handle,
   }
 
 #if defined(__linux__)
-  if (sa.sun_path[0] == 0)
-    /* Linux abstract namespace */
+  /* Linux abstract namespace */
+  if (sa.sun_path[0] == 0) {
     addrlen -= offsetof(struct sockaddr_un, sun_path);
+    if (addrlen > 0) {
+      sa.sun_path[0] = '@';
+    }
+  }
   else
 #endif
     addrlen = strlen(sa.sun_path);
