@@ -59,9 +59,6 @@ API
         Paths on Unix get truncated to ``sizeof(sockaddr_un.sun_path)`` bytes, typically between
         92 and 108 bytes.
 
-    .. note::
-        To bind a Linux abstract namespace socket, use @ instead of \0 as the first character
-
 .. c:function:: void uv_pipe_connect(uv_connect_t* req, uv_pipe_t* handle, const char* name, uv_connect_cb cb)
 
     Connect to the Unix domain socket or the named pipe.
@@ -69,9 +66,6 @@ API
     .. note::
         Paths on Unix get truncated to ``sizeof(sockaddr_un.sun_path)`` bytes, typically between
         92 and 108 bytes.
-
-    .. note::
-        To connect a Linux abstract namespace socket, use @ instead of \0 as the first character
 
 .. c:function:: int uv_pipe_getsockname(const uv_pipe_t* handle, char* buffer, size_t* size)
 
@@ -85,8 +79,6 @@ API
     .. versionchanged:: 1.3.0 the returned length no longer includes the terminating null byte,
                         and the buffer is not null terminated.
 
-    .. versionchanged:: x.y.z in Linux, an abstract socket name will have \0 replaced with @
-
 .. c:function:: int uv_pipe_getpeername(const uv_pipe_t* handle, char* buffer, size_t* size)
 
     Get the name of the Unix domain socket or the named pipe to which the handle
@@ -98,8 +90,6 @@ API
     len will contain the required size.
 
     .. versionadded:: 1.3.0
-
-    .. versionchanged:: x.y.z in Linux, an abstract socket name will have \0 replaced with @
 
 .. c:function:: void uv_pipe_pending_instances(uv_pipe_t* handle, int count)
 
